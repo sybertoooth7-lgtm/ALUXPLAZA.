@@ -8,6 +8,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router';
 import { API_BASE } from '@/lib/api';
 import { secureFetch } from '@/lib/security';
+import { ThemeToggle } from '@/components/theme-toggle';
 
 interface AdminUser {
   id: number;
@@ -58,16 +59,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-navy-base text-white flex items-center justify-center">
-        <p className="text-white/50">Loading…</p>
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <p className="text-muted-foreground">Loading…</p>
       </div>
     );
   }
 
   if (error || !admin) {
     return (
-      <div className="min-h-screen bg-navy-base text-white flex items-center justify-center px-4">
-        <p className="text-alux-red">{error || 'Not signed in.'}</p>
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-4">
+        <p className="text-destructive">{error || 'Not signed in.'}</p>
       </div>
     );
   }
@@ -80,12 +81,12 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-navy-base text-white">
-      <header className="border-b border-white/10 px-6 py-5 flex items-center justify-between">
+    <div className="min-h-screen bg-background text-foreground">
+      <header className="border-b border-border px-6 py-5 flex items-center justify-between">
         <div className="flex items-center gap-8">
           <div>
             <h1 className="font-serif text-lg text-alux-gold">ALUX PLAZA</h1>
-            <p className="text-xs text-white/40 uppercase tracking-wider">Admin</p>
+            <p className="text-xs text-muted-foreground uppercase tracking-wider">Admin</p>
           </div>
           <nav className="flex items-center gap-1">
             {navLinks.map((link) => {
@@ -96,8 +97,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   to={link.to}
                   className={`text-sm px-3 py-1.5 rounded-lg transition-colors ${
                     isActive
-                      ? 'bg-white/10 text-white'
-                      : 'text-white/60 hover:text-white hover:bg-white/5'
+                      ? 'bg-secondary text-foreground'
+                      : 'text-muted-foreground hover:text-foreground hover:bg-secondary/50'
                   }`}
                 >
                   {link.label}
@@ -107,10 +108,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
           </nav>
         </div>
         <div className="flex items-center gap-4">
-          <span className="text-sm text-white/50">{admin.email}</span>
+          <span className="text-sm text-muted-foreground">{admin.email}</span>
+          <ThemeToggle />
           <button
             onClick={handleLogout}
-            className="text-sm text-white/60 hover:text-white border border-white/15 rounded-lg px-4 py-2 transition-colors"
+            className="text-sm text-muted-foreground hover:text-foreground border border-border rounded-lg px-4 py-2 transition-colors"
           >
             Logout
           </button>
