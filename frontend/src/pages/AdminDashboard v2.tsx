@@ -34,17 +34,25 @@ interface SecurityEventRow {
 }
 
 const BAND_STYLES: Record<string, string> = {
-  Strong: 'bg-alux-green/15 text-alux-green',
-  Adequate: 'bg-alux-cyan/15 text-alux-cyan',
-  Developing: 'bg-alux-gold/15 text-alux-gold',
-  'Needs attention': 'bg-alux-red/15 text-alux-red',
-  'Not yet assessed': 'bg-white/10 text-white/50',
+  Strong: 'bg-green-100 text-green-800 dark:bg-alux-green/15 dark:text-alux-green',
+  Adequate: 'bg-cyan-100 text-cyan-800 dark:bg-alux-cyan/15 dark:text-alux-cyan',
+  Developing: 'bg-amber-100 text-amber-800 dark:bg-alux-gold/15 dark:text-alux-gold',
+  'Needs attention': 'bg-red-100 text-red-800 dark:bg-alux-red/15 dark:text-alux-red',
+  'Not yet assessed': 'bg-muted text-muted-foreground',
+};
+
+const BAND_TEXT_STYLES: Record<string, string> = {
+  Strong: 'text-green-800 dark:text-alux-green',
+  Adequate: 'text-cyan-800 dark:text-alux-cyan',
+  Developing: 'text-amber-800 dark:text-alux-gold',
+  'Needs attention': 'text-red-800 dark:text-alux-red',
+  'Not yet assessed': 'text-muted-foreground',
 };
 
 const SEVERITY_STYLES: Record<string, string> = {
-  high: 'bg-alux-red/15 text-alux-red',
-  medium: 'bg-alux-gold/15 text-alux-gold',
-  low: 'bg-white/10 text-white/50',
+  high: 'bg-red-100 text-red-800 dark:bg-alux-red/15 dark:text-alux-red',
+  medium: 'bg-amber-100 text-amber-800 dark:bg-alux-gold/15 dark:text-alux-gold',
+  low: 'bg-muted text-muted-foreground',
 };
 
 export default function AdminDashboard() {
@@ -138,23 +146,23 @@ export default function AdminDashboard() {
           {/* Compliance overview */}
           <section>
             <h2 className="font-serif text-lg text-alux-gold mb-4">Compliance Overview</h2>
-            {overviewError && <p className="text-alux-red text-sm">{overviewError}</p>}
+            {overviewError && <p className="text-destructive text-sm">{overviewError}</p>}
             {overview && (
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                <div className="bg-navy-surface border border-white/10 rounded-xl p-4">
-                  <p className="text-xs text-white/40 mb-1">Total clients</p>
+                <div className="bg-card border border-border rounded-xl p-4">
+                  <p className="text-xs text-muted-foreground mb-1">Total clients</p>
                   <p className="text-2xl font-bold font-mono">{overview.totalClients}</p>
                 </div>
-                <div className="bg-navy-surface border border-white/10 rounded-xl p-4">
-                  <p className="text-xs text-white/40 mb-1">Average score</p>
+                <div className="bg-card border border-border rounded-xl p-4">
+                  <p className="text-xs text-muted-foreground mb-1">Average score</p>
                   <p className="text-2xl font-bold font-mono">
                     {overview.avgScore !== null ? overview.avgScore : '—'}
                   </p>
                 </div>
                 {Object.entries(overview.bandCounts).map(([band, count]) => (
-                  <div key={band} className="bg-navy-surface border border-white/10 rounded-xl p-4">
-                    <p className="text-xs text-white/40 mb-1">{band}</p>
-                    <p className={`text-2xl font-bold font-mono ${BAND_STYLES[band]?.split(' ')[1] || ''}`}>
+                  <div key={band} className="bg-card border border-border rounded-xl p-4">
+                    <p className="text-xs text-muted-foreground mb-1">{band}</p>
+                    <p className={`text-2xl font-bold font-mono ${BAND_TEXT_STYLES[band] || ''}`}>
                       {count}
                     </p>
                   </div>
@@ -166,16 +174,16 @@ export default function AdminDashboard() {
           {/* Client list */}
           <section>
             <h2 className="font-serif text-lg text-alux-gold mb-4">Clients</h2>
-            {clientsError && <p className="text-alux-red text-sm mb-3">{clientsError}</p>}
+            {clientsError && <p className="text-destructive text-sm mb-3">{clientsError}</p>}
             {clientsLoading ? (
-              <p className="text-white/50 text-sm">Loading…</p>
+              <p className="text-muted-foreground text-sm">Loading…</p>
             ) : clients.length === 0 ? (
-              <p className="text-white/50 text-sm">No clients yet.</p>
+              <p className="text-muted-foreground text-sm">No clients yet.</p>
             ) : (
-              <div className="bg-navy-surface border border-white/10 rounded-xl overflow-hidden">
+              <div className="bg-card border border-border rounded-xl overflow-hidden">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-white/10 text-left text-white/40 text-xs uppercase tracking-wide">
+                    <tr className="border-b border-border text-left text-muted-foreground text-xs uppercase tracking-wide">
                       <th className="px-4 py-3 font-medium">Company</th>
                       <th className="px-4 py-3 font-medium">Email</th>
                       <th className="px-4 py-3 font-medium">Score</th>
@@ -195,9 +203,9 @@ export default function AdminDashboard() {
                                 ? 'Developing'
                                 : 'Needs attention';
                       return (
-                        <tr key={c.id} className="border-b border-white/5 last:border-0">
+                        <tr key={c.id} className="border-b border-border/50 last:border-0">
                           <td className="px-4 py-3 font-medium">{c.company_name}</td>
-                          <td className="px-4 py-3 text-white/60">{c.email}</td>
+                          <td className="px-4 py-3 text-muted-foreground">{c.email}</td>
                           <td className="px-4 py-3">
                             <span
                               className={`text-xs font-semibold px-2.5 py-1 rounded-full whitespace-nowrap ${BAND_STYLES[band]}`}
@@ -205,7 +213,7 @@ export default function AdminDashboard() {
                               {c.score !== null ? `${c.score} · ${band}` : band}
                             </span>
                           </td>
-                          <td className="px-4 py-3 text-white/40">
+                          <td className="px-4 py-3 text-muted-foreground">
                             {new Date(c.created_at).toLocaleDateString()}
                           </td>
                         </tr>
@@ -221,16 +229,16 @@ export default function AdminDashboard() {
           {/* Security events */}
           <section>
             <h2 className="font-serif text-lg text-alux-gold mb-4">Recent Security Events</h2>
-            {eventsError && <p className="text-alux-red text-sm mb-3">{eventsError}</p>}
+            {eventsError && <p className="text-destructive text-sm mb-3">{eventsError}</p>}
             {eventsLoading ? (
-              <p className="text-white/50 text-sm">Loading…</p>
+              <p className="text-muted-foreground text-sm">Loading…</p>
             ) : events.length === 0 ? (
-              <p className="text-white/50 text-sm">No security events recorded.</p>
+              <p className="text-muted-foreground text-sm">No security events recorded.</p>
             ) : (
-              <div className="bg-navy-surface border border-white/10 rounded-xl overflow-hidden">
+              <div className="bg-card border border-border rounded-xl overflow-hidden">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-white/10 text-left text-white/40 text-xs uppercase tracking-wide">
+                    <tr className="border-b border-border text-left text-muted-foreground text-xs uppercase tracking-wide">
                       <th className="px-4 py-3 font-medium">IP</th>
                       <th className="px-4 py-3 font-medium">Type</th>
                       <th className="px-4 py-3 font-medium">Severity</th>
@@ -241,8 +249,8 @@ export default function AdminDashboard() {
                   </thead>
                   <tbody>
                     {events.map((e) => (
-                      <tr key={e.id} className="border-b border-white/5 last:border-0">
-                        <td className="px-4 py-3 font-mono text-white/70">{e.ip_address}</td>
+                      <tr key={e.id} className="border-b border-border/50 last:border-0">
+                        <td className="px-4 py-3 font-mono text-foreground/80">{e.ip_address}</td>
                         <td className="px-4 py-3">{e.event_type}</td>
                         <td className="px-4 py-3">
                           <span
@@ -251,17 +259,17 @@ export default function AdminDashboard() {
                             {e.severity}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-white/50 font-mono text-xs truncate max-w-[200px]">
+                        <td className="px-4 py-3 text-muted-foreground font-mono text-xs truncate max-w-[200px]">
                           {e.request_path || '—'}
                         </td>
                         <td className="px-4 py-3">
                           {e.blocked ? (
-                            <span className="text-alux-red text-xs">Blocked</span>
+                            <span className="text-destructive text-xs">Blocked</span>
                           ) : (
-                            <span className="text-white/30 text-xs">Logged only</span>
+                            <span className="text-muted-foreground/70 text-xs">Logged only</span>
                           )}
                         </td>
-                        <td className="px-4 py-3 text-white/40">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {new Date(e.created_at).toLocaleString()}
                         </td>
                       </tr>
