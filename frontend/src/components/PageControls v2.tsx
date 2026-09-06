@@ -16,17 +16,17 @@ export default function PageControls({
       <button
         onClick={() => onChange(page - 1)}
         disabled={page <= 1}
-        className="text-xs text-white/60 hover:text-white border border-white/15 rounded-lg px-3 py-1.5 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        className="text-xs text-muted-foreground hover:text-foreground border border-border rounded-lg px-3 py-1.5 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
       >
         Previous
       </button>
-      <span className="text-xs text-white/40">
+      <span className="text-xs text-muted-foreground">
         Page {page} of {totalPages}
       </span>
       <button
         onClick={() => onChange(page + 1)}
         disabled={page >= totalPages}
-        className="text-xs text-white/60 hover:text-white border border-white/15 rounded-lg px-3 py-1.5 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+        className="text-xs text-muted-foreground hover:text-foreground border border-border rounded-lg px-3 py-1.5 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
       >
         Next
       </button>
