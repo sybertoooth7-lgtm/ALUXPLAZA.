@@ -8,6 +8,7 @@ dist/
 backend/data/*.db
 backend/data/*.db-wal
 backend/data/*.db-shm
+backend/coverage/
 
 # frontend
 frontend/dist/
