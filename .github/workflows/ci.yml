@@ -52,7 +52,16 @@ jobs:
       - run: cd backend && sed -i 's|DATABASE_URL=.*|DATABASE_URL=postgresql://alux:password@localhost:5432/alux_plaza|' .env
       - run: cd backend && sed -i 's/JWT_SECRET=.*/JWT_SECRET=ci-test-secret-123456789012345678901234567890/' .env
       - run: cd backend && sed -i 's/NODE_ENV=.*/NODE_ENV=development/' .env
-      - run: cd backend && npm run test
+      - run: cd backend && npm run test:coverage
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v6
+        with:
+          files: backend/coverage/lcov.info
+          flags: backend
+          fail_ci_if_error: false # a Codecov hiccup shouldn't fail the whole CI run
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   audit:
     runs-on: ubuntu-latest
