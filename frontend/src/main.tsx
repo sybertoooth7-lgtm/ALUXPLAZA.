@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router'
 import { registerSW } from 'virtual:pwa-register'
 import './index.css'
 import App from './App.tsx'
+import { ThemeProvider } from './components/theme-provider.tsx'
 
 // autoUpdate (set in vite.config.ts) means a new deploy replaces the
 // service worker in the background automatically — this callback just
@@ -19,8 +20,10 @@ registerSW({
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </ThemeProvider>
   </StrictMode>,
 )
