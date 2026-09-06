@@ -9,5 +9,15 @@ export default defineConfig({
     // hook. Keeping this false avoids any chance of two files' setup
     // hooks racing on database creation at the same instant.
     fileParallelism: false,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'lcov', 'json-summary'],
+      exclude: [
+        'node_modules/**',
+        'test/**',
+        'src/migrate.js', // thin CLI wrapper, exercised indirectly by test/setup.js
+        'src/scripts/**', // interactive CLI tooling, not meaningfully unit-testable
+      ],
+    },
   },
 });
