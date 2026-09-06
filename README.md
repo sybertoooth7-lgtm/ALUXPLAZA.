@@ -1,6 +1,7 @@
 # Alux Plaza
 
 [![CI](https://github.com/sybertoooth7-lgtm/jinarous/actions/workflows/ci.yml/badge.svg)](https://github.com/sybertoooth7-lgtm/jinarous/actions/workflows/ci.yml)
+[![codecov](https://codecov.io/gh/sybertoooth7-lgtm/jinarous/branch/main/graph/badge.svg)](https://codecov.io/gh/sybertoooth7-lgtm/jinarous)
 [![CodeQL](https://github.com/sybertoooth7-lgtm/jinarous/actions/workflows/codeql.yml/badge.svg)](https://github.com/sybertoooth7-lgtm/jinarous/actions/workflows/codeql.yml)
 [![Secret scanning](https://github.com/sybertoooth7-lgtm/jinarous/actions/workflows/gitleaks.yml/badge.svg)](https://github.com/sybertoooth7-lgtm/jinarous/actions/workflows/gitleaks.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
