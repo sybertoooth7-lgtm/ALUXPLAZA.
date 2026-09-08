@@ -9,6 +9,7 @@ import { useNavigate, Link, useLocation } from 'react-router';
 import { API_BASE } from '@/lib/api';
 import { secureFetch } from '@/lib/security';
 import { ThemeToggle } from '@/components/theme-toggle';
+import { setSentryUser, clearSentryUser } from '@/hooks/useAuthSentry';
 
 interface AdminUser {
   id: number;
@@ -40,6 +41,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
         const data = await res.json();
         if (!mounted) return;
         setAdmin(data.user);
+        setSentryUser(data.user.id, data.user.email, 'admin');
       } catch (err) {
         if (!mounted) return;
         setError(err instanceof Error ? err.message : 'Something went wrong.');
@@ -54,6 +56,7 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
 
   async function handleLogout() {
     await secureFetch('/api/admin/logout', { method: 'POST' }).catch(() => {});
+    clearSentryUser();
     navigate('/admin/login');
   }
 
