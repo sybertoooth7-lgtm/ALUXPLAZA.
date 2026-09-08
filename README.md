@@ -91,6 +91,10 @@ Use Node **20.x** for both packages (see the root `.nvmrc` and each
 package's `engines` field) — it's what CI and the production Docker
 images run.
 
+## Architecture
+
+![Architecture diagram](docs/architecture-diagram.svg)
+
 ## Structure
 
 ```
