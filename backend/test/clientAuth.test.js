@@ -442,6 +442,31 @@ describe('POST /api/client/login', () => {
   });
 });
 
+describe('GET /api/client/me', () => {
+  it('returns the authenticated client\'s own account info', async () => {
+    const app = buildTestApp();
+    const { id: clientId, email, password } = await insertVerifiedClient({ email: uniqueEmail() });
+    const ip = testIp();
+
+    const loginRes = await request(app).post('/api/client/login').set('x-test-ip', ip).send({ email, password });
+    const cookie = loginRes.headers['set-cookie'].find((c) => c.startsWith('clientToken='));
+
+    const res = await request(app).get('/api/client/me').set('Cookie', [cookie]);
+    expect(res.status).toBe(200);
+    expect(res.body.client).toEqual({
+      id: clientId,
+      company_name: 'Test Co',
+      email,
+    });
+  });
+
+  it('rejects a request with no session', async () => {
+    const app = buildTestApp();
+    const res = await request(app).get('/api/client/me');
+    expect(res.status).toBe(401);
+  });
+});
+
 describe('POST /api/client/logout', () => {
   it('blocklists the session token and removes the session row', async () => {
     const app = buildTestApp();
