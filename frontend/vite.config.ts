@@ -2,10 +2,19 @@ import path from "path"
 import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 import { VitePWA } from "vite-plugin-pwa"
+import { sentryVitePlugin } from "@sentry/vite-plugin"
 
 // https://vite.dev/config/
 export default defineConfig({
   base: './',
+  build: {
+    // Only generate source maps when they'll actually be uploaded and
+    // then deleted (see the conditional Sentry plugin below) — without
+    // SENTRY_AUTH_TOKEN, generating maps at all would mean they ship
+    // to production and sit on the public CDN, since nothing would be
+    // there to delete them afterward.
+    sourcemap: Boolean(process.env.SENTRY_AUTH_TOKEN),
+  },
   plugins: [
     react(),
     VitePWA({
@@ -47,6 +56,23 @@ export default defineConfig({
         ],
       },
     }),
+    // Only active when SENTRY_AUTH_TOKEN is set (CI, via the
+    // SENTRY_AUTH_TOKEN secret — see .github/workflows/frontend-ci.yml).
+    // A local `npm run build` without that token just skips this
+    // entirely rather than failing, since sentryVitePlugin() itself
+    // errors out on a missing token if invoked unconditionally.
+    ...(process.env.SENTRY_AUTH_TOKEN
+      ? [
+          sentryVitePlugin({
+            org: process.env.SENTRY_ORG,
+            project: process.env.SENTRY_PROJECT,
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+            sourcemaps: {
+              filesToDeleteAfterUpload: ['./dist/**/*.map'],
+            },
+          }),
+        ]
+      : []),
   ],
   server: {
     port: 3000,
