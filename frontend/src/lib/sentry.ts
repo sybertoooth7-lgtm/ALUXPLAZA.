@@ -20,6 +20,16 @@ export function initErrorTracking() {
     environment: import.meta.env.MODE,
     integrations: [Sentry.browserTracingIntegration()],
     tracesSampleRate: 0.1,
+    // Defense-in-depth: even if someone pastes a real DSN into their
+    // local .env (easy mistake — .env.example doesn't discourage it),
+    // don't let localhost noise reach the production Sentry project.
+    beforeSend(event) {
+      const host = window.location.hostname;
+      if (host === 'localhost' || host === '127.0.0.1' || host === '') {
+        return null;
+      }
+      return event;
+    },
     // Don't let a misconfigured DSN or a Sentry outage break the app —
     // Sentry's own SDK already fails closed on network errors, this
     // just makes that contract explicit.
