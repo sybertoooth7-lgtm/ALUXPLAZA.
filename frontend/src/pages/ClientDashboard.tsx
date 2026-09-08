@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { API_BASE } from '@/lib/api';
 import { secureFetch } from '@/lib/security';
+import { setSentryUser, clearSentryUser } from '@/hooks/useAuthSentry';
 
 interface ComplianceItem {
   id: number;
@@ -55,6 +56,7 @@ export default function ClientDashboard() {
         if (!meRes.ok) throw new Error('Failed to load account.');
         const meData = await meRes.json();
         setClient(meData.client);
+        setSentryUser(meData.client.id, meData.client.email, 'client');
 
         const complianceRes = await fetch(`${API_BASE}/api/client/compliance`, { credentials: 'include' });
         if (!complianceRes.ok) throw new Error('Failed to load compliance status.');
@@ -87,6 +89,7 @@ export default function ClientDashboard() {
     // (the backend enforces CSRF verification globally on all
     // non-GET requests, including this one).
     await secureFetch('/api/client/logout', { method: 'POST' }).catch(() => {});
+    clearSentryUser();
     navigate('/client/login');
   }
 
