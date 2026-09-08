@@ -10,10 +10,13 @@ A standards-based cybersecurity consultancy platform for SMEs in East
 Africa, grounded in NIST SP 800-61, PCI DSS, and the Kenya Data
 Protection Act 2019.
 
-<!-- TODO: add a screenshot or short demo GIF of the client dashboard
-     and/or admin dashboard here before publishing this README widely.
-     A picture of the actual product is the single highest-value thing
-     missing from this file right now. -->
+<!-- TODO: replace this with a real screenshot or short demo GIF of the
+     client and/or admin dashboard once you've taken one. A static mockup
+     matching the real design (docs/admin-dashboard-mockup.html) is
+     available to screenshot in the meantime — open it in a browser,
+     screenshot it, and swap this comment for an actual <img> tag.
+     A picture of the real product is still the single highest-value
+     thing missing from this file. -->
 
 - **Backend:** Node.js/Express (ESM), PostgreSQL, JWT auth (double
   cookie: separate `adminToken` for admins, `clientToken` for clients),
