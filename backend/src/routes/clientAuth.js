@@ -10,6 +10,7 @@ import { recordFailedLogin } from '../shield/bruteForceGuard.js';
 import { logLoginAttempt, isNewIp, alertNewDevice, DUMMY_HASH } from '../middleware/loginAudit.js';
 import { parseExpiryToMs } from '../lib/parseExpiry.js';
 import { sendVerificationEmail, sendPasswordResetEmail } from '../lib/email.js';
+import { requireClientAuth } from '../middleware/clientAuth.js';
 
 const router = Router();
 
@@ -539,6 +540,28 @@ router.post(
 
     clearAuthCookie(res);
     res.json({ success: true });
+  })
+);
+
+/**
+ * GET /api/client/me
+ * The client's own basic account info — used by ClientDashboard.tsx on
+ * every mount to both confirm the session is valid and populate the
+ * header. This was missing entirely; the frontend has always called it.
+ */
+router.get(
+  '/me',
+  requireClientAuth,
+  asyncHandler(async (req, res) => {
+    const result = await db.query(
+      'SELECT id, company_name, email FROM clients WHERE id = $1',
+      [req.client.sub]
+    );
+    const client = result.rows[0];
+    if (!client) {
+      return res.status(404).json({ error: 'Client not found' });
+    }
+    res.json({ client });
   })
 );
 
